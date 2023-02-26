@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Puchase Management System'),
+    'name' => env('APP_NAME', 'Purchase Management System'),
 
     /*
     |--------------------------------------------------------------------------

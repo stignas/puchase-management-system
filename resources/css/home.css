@@ -11,6 +11,11 @@
     height: 200px;
 }
 
+.logo-50 {
+    width: 50px;
+    height: 50px;
+}
+
 .grid-5x5 {
     display: grid;
     grid-template-rows: repeat(5,1fr);
