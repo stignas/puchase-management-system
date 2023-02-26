@@ -4,33 +4,55 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-    <!-- Scripts -->
+    <!-- Normalize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+          integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous"></script>
+    <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/6759c1c345.js" crossorigin="anonymous"></script>
+    <title>{{ config('app.name', 'Purchase Management System') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased">
-<div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+
+<body class="d-flex flex-column height-100vh">
+<header class="app-header p-3">
     @include('layouts.navigation')
 
-    <!-- Page Heading -->
-    @if (isset($header))
-        <header class="bg-white dark:bg-gray-800 shadow">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                {{ $header }}
-            </div>
-        </header>
-    @endif
-
+</header>
+<main class="app-main h-100 d-flex">
+    <!-- Navigation -->
+    <aside class="app-nav h-100 p-3">
+        <x-side-nav/>
+    </aside>
     <!-- Page Content -->
-    <main>
+    <section class="app-section h-100 p-3 flex-grow-1">
         {{ $slot }}
-    </main>
+    </section>
+</main>
+<footer class="app-footer p-3 d-flex justify-content-between">
+    <div class="">
+        &COPY 2023. All rights reserved
+    </div>
+    {{  Route::currentRouteName() }}
+    <div>
+    @yield('current-page')
+    </div>
+</footer>
+{{--    <!-- Page Heading -->--}}
+{{--    @if (isset($header))--}}
+{{--        <header>--}}
+{{--            <div>--}}
+{{--                {{ $header }}--}}
+{{--            </div>--}}
+{{--        </header>--}}
+{{--    @endif--}}
+
 </div>
 </body>
 </html>

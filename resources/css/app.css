@@ -3,4 +3,101 @@
 /*@tailwind base;*/
 /*@tailwind components;*/
 /*@tailwind utilities;*/
+:root {
+    --logo: #1B7EA1;
+    --logo-light: invert(85%) sepia(79%) saturate(3220%) hue-rotate(171deg) brightness(97%) contrast(85%);
+    --logo-dark: invert(15%) sepia(57%) saturate(1005%) hue-rotate(195deg) brightness(99%) contrast(91%);
+    --yellow: #f8e9a1;
+    --yellow-svg: invert(89%) sepia(13%) saturate(972%) hue-rotate(356deg) brightness(105%) contrast(95%);
+    --red: #f76c6c;
+    --red-svg: invert(46%) sepia(79%) saturate(810%) hue-rotate(320deg) brightness(109%) contrast(92%);
+    --light-blue: #a8d0e6;
+    --mid-blue: #374785;
+    --dark-blue: #24305e;
+}
+
+.logo-dark {
+    filter: var(--logo-dark);
+}
+
+.logo-light {
+    filter: var(--logo-light);
+}
+
+.text-primary {
+    color: var(--dark-blue) !important;
+}
+
+.text-secondary {
+    color: var(--mid-blue) !important;
+}
+
+.text-info {
+    color: var(--light-blue) !important;
+}
+
+.text-warning {
+    color: var(--yellow) !important;
+}
+
+.text-danger {
+    color: var(--red) !important;
+}
+
+.bg-primary {
+    background-color: var(--dark-blue) !important;
+}
+
+.nav-link {
+    color: var(--yellow) !important;
+}
+
+.btn-warning {
+    font-weight: 500;
+    color: var(--mid-blue) !important;
+}
+
+.btn-info {
+    font-weight: 500;
+    color: var(--mid-blue) !important;
+}
+
+.link-info {
+    color: var(--light-blue) !important;
+}
+
+.app-main {
+    box-sizing: border-box;
+    width: 100vw;
+}
+
+.app-header {
+    background-color: var(--dark-blue);
+    color: var(--yellow);
+    height: fit-content;
+}
+
+.app-nav {
+    width: fit-content;
+    background-color: var(--mid-blue);
+    color: var(--yellow);
+}
+
+.app-section {
+    background-color: var(--light-blue);
+}
+
+.app-footer {
+    background-color: var(--dark-blue);
+    color: var(--yellow);
+    height: 5vh;
+}
+
+.svg {
+    filter: var(--yellow-svg);
+}
+
+.filter:hover {
+    filter: var(--red-svg);
+}
 

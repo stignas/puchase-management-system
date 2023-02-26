@@ -29,7 +29,7 @@
                     <div class="grid-logo">
                         <div class="p-3">
                             <a href="{{ route('home') }}">
-                                <x-application-logo/>
+                                <x-application-logo class="logo-200 logo-dark"/>
                             </a>
                         </div>
                     </div>
