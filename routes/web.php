@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SuppliersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,5 +28,22 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// Supplier control
+
+Route::middleware('auth')->group(function () {
+    Route::resource('suppliers', SuppliersController::class)->names([
+        'index' => 'suppliers.index',
+        'create' => 'suppliers.create',
+        'store' => 'suppliers.store',
+        'edit' => 'suppliers.edit',
+        'update' => 'suppliers.update',
+        'destroy' => 'suppliers.delete'
+    ]);
+});
+
+// Item Control
+
+
 
 require __DIR__.'/auth.php';

@@ -11,6 +11,7 @@
     --yellow-svg: invert(89%) sepia(13%) saturate(972%) hue-rotate(356deg) brightness(105%) contrast(95%);
     --red: #f76c6c;
     --red-svg: invert(46%) sepia(79%) saturate(810%) hue-rotate(320deg) brightness(109%) contrast(92%);
+    --white-svg: invert(100%) sepia(1%) saturate(7434%) hue-rotate(70deg) brightness(108%) contrast(103%);
     --light-blue: #a8d0e6;
     --mid-blue: #374785;
     --dark-blue: #24305e;
@@ -62,6 +63,14 @@
     color: var(--mid-blue) !important;
 }
 
+.link-warning {
+    color: var(--yellow) !important;
+}
+
+.link-danger {
+    color: var(--red) !important;
+}
+
 .link-info {
     color: var(--light-blue) !important;
 }
@@ -93,11 +102,19 @@
     height: 5vh;
 }
 
-.svg {
+.svg-warning {
     filter: var(--yellow-svg);
 }
 
-.filter:hover {
+.svg-danger {
     filter: var(--red-svg);
+}
+
+.svg-warning:hover, .nav-item:hover {
+    filter: var(--red-svg) !important;
+}
+
+.svg-light {
+    filter: var(--white-svg);
 }
 

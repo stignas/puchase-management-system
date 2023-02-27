@@ -1,1 +1,1 @@
-<img {{ $attributes->merge(['class' => 'rounded mx-auto d-block', 'src' => 'assets/img/system-logo.svg']) }} >
+<img src="{{ asset('assets/img/system-logo.svg') }}" {{ $attributes->merge(['class' => 'rounded mx-auto d-block']) }} >

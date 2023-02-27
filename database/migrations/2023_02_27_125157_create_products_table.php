@@ -15,7 +15,8 @@ return new class extends Migration
             $table->increments('id')->from(100000);
             $table->string('name', 40);
             $table->text('description')->nullable();
-            $table->foreignId('supp_id')->constrained('suppliers');
+            $table->integer('supp_id')->unsigned();
+            $table->foreign('supp_id')->references('id')->on('suppliers');
             $table->decimal('cost');
             $table->tinyInteger('VAT')->default('21');
             $table->timestamp('created_at')->useCurrent();
