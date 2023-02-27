@@ -16,7 +16,7 @@ class SuppliersController extends Controller
      */
     public function index(): View
     {
-        return view('suppliers.index', ['suppliers' => Suppliers::all()->toArray()]);
+        return view('suppliers.index', ['suppliers' => Suppliers::all()]);
     }
 
     /**
@@ -89,7 +89,7 @@ class SuppliersController extends Controller
         $supplier->email = $request->email;
         $supplier->save();
 
-        return Redirect::route('suppliers.index', $id);
+        return Redirect::route('suppliers.index');
     }
 
     /**
@@ -98,6 +98,6 @@ class SuppliersController extends Controller
     public function destroy(int $id): RedirectResponse
     {
         Suppliers::findOrFail($id)->delete();
-        return Redirect::route('suppliers.index', $id);
+        return Redirect::route('suppliers.index');
     }
 }

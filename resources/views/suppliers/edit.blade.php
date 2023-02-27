@@ -2,7 +2,7 @@
     <div class="container shadow rounded bg-light py-3">
         <h1 class="text-center text-secondary">Edit Supplier</h1>
         <!-- Supplier Edit Form-->
-        <form class="text-primary w-50 m-auto" method="POST" action="{{ route('suppliers.update',  $supplier->id) }}"
+        <form class="text-primary w-50 m-auto" method="POST" action="{{ route('suppliers.update', $supplier->id) }}"
               id="supplier-create-form">
             @csrf
             @method('put')
@@ -12,7 +12,7 @@
                 <input class="form-control" id="supp-name" type="text" name="name" required
                        autofocus autocomplete="name" size="50" maxlength="50" value="{{ $supplier->name }}">
             </div>
-            <!-- Adress -->
+            <!-- Address -->
             <div class="border p-3 my-3 row">
                 <div class="form-group">
                     <label for="supp-address">Street Address</label>

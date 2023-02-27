@@ -19,10 +19,10 @@
                 <!-- Table records -->
                 @foreach($suppliers as $supplier)
                     <tr>
-                        <td>{{ $supplier['id'] }}</td>
-                        <td>{{ $supplier['name'] }}</td>
-                        <td>{{ $supplier['email'] }}</td>
-                        <!-- Action button -->>
+                        <td>{{ $supplier->id }}</td>
+                        <td>{{ $supplier->name }}</td>
+                        <td>{{ $supplier->email }}</td>
+                        <!-- Action button -->
                         <td>
                             <div class="btn-group dropup">
                                 <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
@@ -32,7 +32,7 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-dark">
                                     <!-- Delete action -->
-                                    <form method="post" action="{{ route('suppliers.delete', $supplier['id']) }}">
+                                    <form method="post" action="{{ route('suppliers.delete', $supplier->id) }}">
                                         @csrf
                                         @method('delete')
                                         <button type="submit" class="btn btn-link link-danger dropdown-item">
@@ -43,7 +43,7 @@
                                     </form>
                                     <!-- Edit action -->
                                     <a class="dropdown-item link-warning"
-                                       href="{{ route('suppliers.edit', $supplier['id']) }}">
+                                       href="{{ route('suppliers.edit', $supplier->id) }}">
                                         <img src="../assets/img/icons/pen-to-square-solid.svg" width="20px"
                                              height="20px"
                                              class="p-1 svg-warning">Edit</a>
