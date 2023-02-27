@@ -18,10 +18,9 @@ return new class extends Migration
             $table->string('city',100);
             $table->string('country', 100);
             $table->string('email',320);
-            $table->smallInteger('payment_terms')->default(30);
-            $table->enum('shipping_terms', ['DAP','DPU','DDP','CPT','CIP','CFR','CIF','FCA','FAS','FOB','EXW'])->default('CIP');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+            $table->softDeletes();
         });
     }
 

@@ -13,7 +13,6 @@
         <label for="password">Password</label>
         <input class="form-control" id="password" type="password" name="password" required
                autocomplete="current-password" placeholder="Password">
-
     </div>
     <!-- Remember Me -->
     <div class="form-check py-3">
