@@ -40,7 +40,7 @@
                 <div class="form-group col-md-3">
                     <label for="prod-vat">VAT</label>
                     <input class="form-control" id="prod-vat" type="number" name="VAT"
-                           autocomplete="vat" size="3" min="0" value="{{ old('VAT') }}">
+                           autocomplete="vat" size="3" min="0" value="{{ old('VAT', '21') }}">
                     @error('VAT')
                     <p class="text-danger">{{ $message }}</p>
                     @enderror

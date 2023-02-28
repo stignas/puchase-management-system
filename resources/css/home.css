@@ -23,12 +23,12 @@
 }
 
 .grid-logo {
-    grid-column: 3/ span 1;
+    grid-column: 3 / span 1;
     grid-row: 2 / span 1;
 }
 
 .grid-form {
-    grid-column: 3/ span 1;
+    grid-column: 3 / span 1;
     grid-row: 3 / span 1;
 }
 

@@ -77,7 +77,8 @@
 
 .app-main {
     box-sizing: border-box;
-    width: 100vw;
+    width: 100%;
+    overflow-y: hidden;
 }
 
 .app-header {
@@ -94,12 +95,15 @@
 
 .app-section {
     background-color: var(--light-blue);
+    margin: 0 auto;
+    height: 100%;
+    overflow-y: auto;
 }
 
 .app-footer {
     background-color: var(--dark-blue);
     color: var(--yellow);
-    height: 5vh;
+    height: fit-content;
 }
 
 .svg-warning {

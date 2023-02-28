@@ -1,11 +1,24 @@
 <x-app-layout>
     <div class="container-xxl shadow rounded bg-light py-3">
-            <div class="py-3 float-start text-secondary">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="py-3 text-secondary">
                 <h1 class="text-center text-secondary">Suppliers</h1>
             </div>
-            <div class="py-3 float-end">
+            <div class="py-3">
+                <form method="get" action="{{ route('suppliers.index') }}" role="search" class="d-flex justify-contenct-around">
+                    @csrf
+                    <a class="btn btn-danger m-1" href="{{ route('suppliers.index') }}">
+                        <img class="svg-light" src="{{ asset('/assets/img/icons/arrow-rotate-left-solid.svg') }}" width="16px" height="16px">
+                    </a>
+                    <input class="form-control d-inline-block m-1" name='search'
+                           placeholder="Search by name or id.." value="{{ old('search') }}">
+                    <button type="submit" class="btn btn-secondary d-inline-block m-1">Search</button>
+                </form>
+            </div>
+            <div class="py-3">
                 <a href="{{ route('suppliers.create') }}" class="btn btn-danger">+ Create New</a>
             </div>
+        </div>
             <!-- List table -->
             <table class="table table-hover">
                 <!-- Table headers -->
@@ -55,6 +68,7 @@
                     </tr>
                 @endforeach
             </table>
+        {{ $suppliers->links() }}
         </div>
         <!-- Location Info -->
         @section('current-page')
