@@ -94,11 +94,11 @@ class SuppliersController extends Controller
         $validated = $validator->validated();
 
         $supplier = Suppliers::findOrFail($id);
-        $supplier->name = trim($validated['name']);
-        $supplier->address = trim($validated['address']);
-        $supplier->city = trim($validated['city']);
-        $supplier->country = trim($validated['country']);
-        $supplier->email = trim($validated['email']);
+        $supplier->name = $validated['name'];
+        $supplier->address = $validated['address'];
+        $supplier->city = $validated['city'];
+        $supplier->country = $validated['country'];
+        $supplier->email = $validated['email'];
         $supplier->save();
 
         return Redirect::route('suppliers.index');
