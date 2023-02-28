@@ -21,7 +21,7 @@
 <body>
 @if(Route::has('login'))
     @auth
-        <a href="{{ url('/dashboard') }}">Dashboard</a>
+
     @else
         <main class="height-100vh">
             <div class="container text-center height-100">

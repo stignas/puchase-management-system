@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SuppliersController;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('home');
 })->name('home');
+
+Route::get('/', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -44,6 +49,15 @@ Route::middleware('auth')->group(function () {
 
 // Item Control
 
-
+Route::middleware('auth')->group(function () {
+    Route::resource('products', ProductsController::class)->names([
+        'index' => 'products.index',
+        'create' => 'products.create',
+        'store' => 'products.store',
+        'edit' => 'products.edit',
+        'update' => 'products.update',
+        'destroy' => 'products.delete'
+    ]);
+});
 
 require __DIR__.'/auth.php';

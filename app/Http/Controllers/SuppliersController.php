@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Suppliers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 class SuppliersController extends Controller
@@ -32,20 +32,27 @@ class SuppliersController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+
+        $validator = Validator::make($request->all(),[
             'name' => 'required|max:50',
             'address' => 'required|max:255',
             'city' => 'required|max:100',
             'country' => 'required|max:100',
-            "email" => 'required|max:320'
+            "email" => 'email:rfc'
         ]);
 
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator);
+        }
+
+        $validated = $validator->validated();
+
         $supplier = new Suppliers();
-        $supplier->name = $request->name;
-        $supplier->address = $request->address;
-        $supplier->city = $request->city;
-        $supplier->country = $request->country;
-        $supplier->email = $request->email;
+        $supplier->name = $validated['name'];
+        $supplier->address = $validated['address'];
+        $supplier->city = $validated['city'];
+        $supplier->country = $validated['country'];
+        $supplier->email = $validated['email'];
         $supplier->save();
 
         return Redirect::route('suppliers.index');
@@ -72,21 +79,26 @@ class SuppliersController extends Controller
      */
     public function update(Request $request, int $id): RedirectResponse
     {
-        $request->validate([
+        $validator = Validator::make($request->all(),[
             'name' => 'required|max:50',
             'address' => 'required|max:255',
             'city' => 'required|max:100',
             'country' => 'required|max:100',
-            "email" => 'required|max:320'
+            "email" => 'email:rfc'
         ]);
 
-        $supplier = Suppliers::findOrFail($id);
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator);
+        }
 
-        $supplier->name = $request->name;
-        $supplier->address = $request->address;
-        $supplier->city = $request->city;
-        $supplier->country = $request->country;
-        $supplier->email = $request->email;
+        $validated = $validator->validated();
+
+        $supplier = Suppliers::findOrFail($id);
+        $supplier->name = $validated['name'];
+        $supplier->address = $validated['address'];
+        $supplier->city = $validated['city'];
+        $supplier->country = $validated['country'];
+        $supplier->email = $validated['email'];
         $supplier->save();
 
         return Redirect::route('suppliers.index');

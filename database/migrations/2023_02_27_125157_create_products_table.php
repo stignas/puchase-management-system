@@ -21,6 +21,7 @@ return new class extends Migration
             $table->tinyInteger('VAT')->default('21');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+            $table->softDeletes();
         });
     }
 
