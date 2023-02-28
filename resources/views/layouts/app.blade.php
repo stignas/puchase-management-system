@@ -21,38 +21,30 @@
 </head>
 
 <body class="d-flex flex-column height-100vh">
+<!-- Header -->
 <header class="app-header p-3">
     @include('layouts.navigation')
-
 </header>
-<main class="app-main h-100 d-flex">
+<!-- Main -->
+<main class="app-main d-flex h-100">
     <!-- Navigation -->
-    <aside class="app-nav h-100 p-3">
+    <aside class="app-nav p-3 flex-grow-0">
         <x-side-nav/>
     </aside>
     <!-- Page Content -->
-    <section class="app-section h-100 p-3 flex-grow-1">
+    <section class="app-section flex-grow-1">
         {{ $slot }}
     </section>
 </main>
+<!-- Footer -->
 <footer class="app-footer p-3 d-flex justify-content-between">
     <div class="">
         &COPY 2023. All rights reserved
     </div>
     {{  Route::currentRouteName() }}
     <div>
-    @yield('current-page')
+        @yield('current-page')
     </div>
 </footer>
-{{--    <!-- Page Heading -->--}}
-{{--    @if (isset($header))--}}
-{{--        <header>--}}
-{{--            <div>--}}
-{{--                {{ $header }}--}}
-{{--            </div>--}}
-{{--        </header>--}}
-{{--    @endif--}}
-
-</div>
 </body>
 </html>

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Products;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -16,9 +15,19 @@ class ProductsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        return view('products.index', ['products' => Products::all()]);
+        $search = $request->input('search');
+        if (isset($search)) {
+            $products = Products::query()
+                ->where('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('id', 'LIKE', '%' . $search . '%')
+                ->paginate(10);
+        } else {
+            $products = Products::paginate(10);
+        }
+
+        return view('products.index', ['products' => $products]);
     }
 
     /**
@@ -39,10 +48,12 @@ class ProductsController extends Controller
             'name' => 'required|max:40',
             'supp_id' => Rule::exists('suppliers', 'id')->withoutTrashed(),
             'cost' => 'required',
+            'VAT' => 'required',
         ], [
             'name' => 'Name is required.',
             'supp_id' => "Supplier doesn't exist",
             'cost' => 'Cost is required',
+            'VAT' => 'VAT is required.',
         ]);
 
         if ($validator->fails()) {
