@@ -2,27 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\products;
+use App\Models\Products;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class ProductsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(): View
     {
-        //
+        return view('products.index', ['products' => Products::all()]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): Response
+    public function create(): View
     {
-        //
+        return view('products.create');
     }
 
     /**
@@ -30,13 +34,38 @@ class ProductsController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        //
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:40',
+            'supp_id' => Rule::exists('suppliers', 'id')->withoutTrashed(),
+            'cost' => 'required',
+        ], [
+            'name' => 'Name is required.',
+            'supp_id' => "Supplier doesn't exist",
+            'cost' => 'Cost is required',
+        ]);
+
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator);
+        }
+
+        $validated = $validator->validated();
+
+        $product = new Products();
+        $product->name = $validated['name'];
+        $product->description = $request->description;
+        $product->supp_id = $validated['supp_id'];
+        $product->cost = number_format($validated['cost'], 2, '.', '');
+        $product->VAT = $request->VAT;
+        $product->save();
+
+        return Redirect::route('products.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(products $products): Response
+    public function show(Products $products)
     {
         //
     }
@@ -44,24 +73,49 @@ class ProductsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(products $products): Response
+    public function edit(int $id): View
     {
-        //
+        return view('products.edit', ['product' => Products::findOrFail($id)]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, products $products): RedirectResponse
+    public function update(Request $request, int $id): RedirectResponse
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:40',
+            'supp_id' => Rule::exists('suppliers', 'id')->withoutTrashed(),
+            'cost' => 'required',
+        ], [
+            'name' => 'Name is required.',
+            'supp_id' => "Supplier doesn't exist",
+            'cost' => 'Cost is required',
+        ]);
+
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator);
+        }
+
+        $validated = $validator->validated();
+
+        $product = Products::findOrFail($id);
+        $product->name = $validated['name'];
+        $product->description = $request->description;
+        $product->supp_id = $validated['supp_id'];
+        $product->cost = number_format($validated['cost'], 2, '.', '');
+        $product->VAT = $request->VAT;
+        $product->save();
+
+        return Redirect::route('products.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(products $products): RedirectResponse
+    public function destroy(int $id): RedirectResponse
     {
-        //
+        Products::findOrFail($id)->delete();
+        return Redirect::route('products.index');
     }
 }

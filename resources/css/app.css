@@ -118,3 +118,7 @@
     filter: var(--white-svg);
 }
 
+.table {
+    table-layout: fixed;
+}
+

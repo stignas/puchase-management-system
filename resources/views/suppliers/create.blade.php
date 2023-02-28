@@ -9,25 +9,37 @@
             <div class="form-group row">
                 <label for="supp-name">Supplier Name</label>
                 <input class="form-control" id="supp-name" type="text" name="name" required
-                       autofocus autocomplete="name" size="50" maxlength="50">
+                       autofocus autocomplete="name" size="50" maxlength="50" value="{{ old('name') }}">
+                @error('name')
+                <p class="text-danger">{{ $message }}</p>
+                @enderror
             </div>
-            <!-- Adress -->
+            <!-- Address -->
             <div class="border p-3 my-3 row">
                 <div class="form-group">
                     <label for="supp-address">Street Address</label>
                     <input class="form-control" id="supp-address" type="text" name="address" required
-                           autocomplete="address" size="255" maxlength="255">
+                           autocomplete="address" size="255" maxlength="255" value="{{ old('address') }}">
+                    @error('address')
+                    <p class="text-danger">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="form-group col-md-6">
                     <label for="supp-city">City</label>
                     <input class="form-control" id="supp-city" type="text" name="city" required
-                           autocomplete="city" size="100" maxlength="100">
+                           autocomplete="city" size="100" maxlength="100" value="{{ old('city') }}">
+                    @error('city')
+                    <p class="text-danger">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div class="form-group col-md-6">
                     <label for="supp-country">Country</label>
                     <input class="form-control" id="supp-country" type="text" name="country" required
-                           autocomplete="country" size="100" maxlength="100">
+                           autocomplete="country" size="100" maxlength="100" value="{{ old('country') }}">
+                    @error('country')
+                    <p class="text-danger">{{ $message }}</p>
+                    @enderror
                 </div>
 
             </div>
@@ -36,7 +48,10 @@
                 <div class="form-group col-md-6">
                     <label for="supp-email">E-mail</label>
                     <input class="form-control" id="supp-email" type="email" name="email" required
-                           autocomplete="email" size="100" maxlength="320">
+                           autocomplete="email" size="100" maxlength="320" value="{{ old('email') }}">
+                    @error('email')
+                    <p class="text-danger">{{ $message }}</p>
+                    @enderror
                 </div>
             </div>
             <!-- Buttons -->
@@ -45,7 +60,7 @@
                 <button class="d-block btn btn-info w-25 my-3 m-auto" type="submit">Save</button>
             </div>
         </form>
-        <!-- Location Info -->>
+        <!-- Location Info -->
         @section('current-page')
             Suppliers/Create
         @endsection
