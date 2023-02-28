@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="container shadow rounded bg-light py-3">
-        <h1 class="text-center text-secondary">Edit Supplier</h1>
+        <h1 class="text-center text-secondary">Edit Product</h1>
         <!-- Supplier Edit Form-->
         <form class="text-primary w-50 m-auto" method="POST" action="{{ route('products.update', $product->id) }}"
               id="supplier-create-form">
@@ -19,7 +19,7 @@
             <div class="border p-3 my-3 row">
                 <div class="form-group">
                     <label for="prod-description">Description</label>
-                    <textarea class="form-control" id="prod-description" type="text" name="description"
+                    <textarea rows="4" class="form-control" id="prod-description" type="text" name="description"
                               autocomplete="description" maxlength="255">{{ $product->description }}</textarea>
                     @error('description')
                     <p class="text-danger">{{ $message }}</p>
@@ -27,8 +27,8 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label for="supp-id">Supplier Id</label>
-                    <input class="form-control" id="supp-id" type="text" name="supp_id" required
-                           autocomplete="supp_id" size="100" maxlength="100" value="{{ $product->supp_id }}">
+                    <input class="form-control" id="supp-id" type="number" name="supp_id" required
+                           autocomplete="supp_id" size="5" maxlength="5" value="{{ $product->supp_id }}">
                     @error('supp_id')
                     <p class="text-danger">{{ $message }}</p>
                     @enderror
@@ -36,7 +36,7 @@
                 <div class="form-group col-md-3">
                     <label for="prod-cost">Cost</label>
                     <input class="form-control" id="prod-cost" type="number" name="cost" required
-                           autocomplete="cost" size="6" min="0" step="0.01" value="{{ $product->cost }}">
+                           autocomplete="cost" size="10" min="0" step="0.01" value="{{ $product->cost }}">
                     @error('cost')
                     <p class="text-danger">{{ $message }}</p>
                     @enderror

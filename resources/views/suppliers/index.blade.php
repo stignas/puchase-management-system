@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="container-fluid shadow rounded bg-light py-3">
+    <div class="container shadow rounded bg-light py-3">
             <div class="py-3 float-start text-secondary">
                 <h1 class="text-center text-secondary">Suppliers</h1>
             </div>
