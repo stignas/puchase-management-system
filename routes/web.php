@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PurchaseOrdersController;
 use App\Http\Controllers\SuppliersController;
+use App\Http\Controllers\TransactionsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,10 +17,10 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+//
+//Route::get('/', function () {
+//    return view('home');
+//})->name('home');
 
 Route::get('/', function () {
     return view('dashboard');
@@ -34,30 +36,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Supplier control
+// Resource Controllers
 
 Route::middleware('auth')->group(function () {
-    Route::resource('suppliers', SuppliersController::class)->names([
-        'index' => 'suppliers.index',
-        'create' => 'suppliers.create',
-        'store' => 'suppliers.store',
-        'edit' => 'suppliers.edit',
-        'update' => 'suppliers.update',
-        'destroy' => 'suppliers.delete'
-    ]);
-});
-
-// Item Control
-
-Route::middleware('auth')->group(function () {
-    Route::resource('products', ProductsController::class)->names([
-        'index' => 'products.index',
-        'create' => 'products.create',
-        'store' => 'products.store',
-        'edit' => 'products.edit',
-        'update' => 'products.update',
-        'destroy' => 'products.delete'
-    ]);
+    Route::resources([
+        'suppliers' => SuppliersController::class,
+        'products' => ProductsController::class,
+        'purchase_orders' => PurchaseOrdersController::class,
+        'purchase_orders.transactions' => TransactionsController::class,
+        ]);
+    Route::post('/purchase_orders/create/supp_id', [SuppliersController::class, 'get'])->name('suppliers.get');
+    Route::post('/purchase_orders/edit/prod_id/{order}', [ProductsController::class, 'get'])->name('products.get');
 });
 
 require __DIR__.'/auth.php';

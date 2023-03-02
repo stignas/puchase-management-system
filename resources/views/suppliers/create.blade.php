@@ -24,7 +24,6 @@
                     <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
-
                 <div class="form-group col-md-6">
                     <label for="supp-city">City</label>
                     <input class="form-control" id="supp-city" type="text" name="city" required
@@ -62,7 +61,7 @@
         </form>
         <!-- Location Info -->
         @section('current-page')
-            Suppliers/Create
+            Suppliers / Create
         @endsection
     </div>
 </x-app-layout>

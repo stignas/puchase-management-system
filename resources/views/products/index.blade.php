@@ -1,19 +1,20 @@
 <x-app-layout>
-    <div class="container-xl shadow rounded bg-light py-3">
+    <div class="container-xl shadow rounded bg-light py-3 my-2">
         <div class="d-flex justify-content-between align-items-center">
             <div class="py-3 text-secondary">
                 <h1 class="text-center text-secondary">Products</h1>
             </div>
             <div class="py-3">
                 <form method="get" action="{{ route('products.index') }}" role="search"
-                      class="d-flex justify-content-around">
+                      class="d-flex justify-content-around" id="search-form">
                     @csrf
                     <a class="btn btn-danger m-1" href="{{ route('products.index') }}">
                         <img class="svg-light" src="{{ asset('/assets/img/icons/arrow-rotate-left-solid.svg') }}"
-                             width="16px" height="16px">
+                             width="16px" height="16px" alt="arrow">
                     </a>
                     <input class="form-control d-inline-block m-1" name='search'
-                           placeholder="Search by name or id.." value="{{ old('search') }}">
+                           placeholder="Search by name or id.." value="{{ old('search') }}"
+                           onchange="document.getElementById('search-form').submit()">
                     <button type="submit" class="btn btn-secondary d-inline-block m-1">Search</button>
                 </form>
             </div>
@@ -54,20 +55,20 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-dark">
                                 <!-- Delete action -->
-                                <form method="post" action="{{ route('products.delete', $product->id) }}">
+                                <form method="post" action="{{ route('products.destroy', $product->id) }}">
                                     @csrf
                                     @method('delete')
                                     <button type="submit" class="btn btn-link link-danger dropdown-item">
-                                        <img src="../assets/img/icons/trash-can-solid.svg" width="20px"
-                                             height="20px"
+                                        <img src="{{ asset('assets/img/icons/trash-can-solid.svg') }}" width="20px"
+                                             height="20px" alt="trash"
                                              class="p-1 svg-danger">Delete
                                     </button>
                                 </form>
                                 <!-- Edit action -->
                                 <a class="dropdown-item link-warning"
                                    href="{{ route('products.edit', $product->id) }}">
-                                    <img src="../assets/img/icons/pen-to-square-solid.svg" width="20px"
-                                         height="20px"
+                                    <img src="{{ asset('assets/img/icons/pen-to-square-solid.svg') }}" width="20px"
+                                         height="20px" alt="pen"
                                          class="p-1 svg-warning">Edit</a>
                             </div>
                         </div>
@@ -75,11 +76,15 @@
                 </tr>
             @endforeach
         </table>
-        {{ $products->links() }}
+        {{ $products->onEachSide(1)->links() }}
     </div>
     <!-- Location Info -->
     @section('current-page')
-        Products
-        @endsection
-        </div>
+        @if(session()->has('success'))
+            <span class="text-success">{{ session()->pull('success') }}</span> /
+        @elseif(session()->has('error'))
+            <span class="text-danger">  {{  session()->pull('error') }}</span> /
+        @endif
+        <span>Products</span>
+    @endsection
 </x-app-layout>

@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Products;
+use App\Models\PurchaseOrders;
+use App\Models\Suppliers;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Validator as ValidatorObj;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -18,13 +24,19 @@ class ProductsController extends Controller
     public function index(Request $request): View
     {
         $search = $request->input('search');
+
         if (isset($search)) {
             $products = Products::query()
-                ->where('name', 'LIKE', '%' . $search . '%')
+                ->whereHas('supplier', function (Builder $query) use ($search) {
+                    return $query->where('name', 'LIKE', '%' . $search . '%')
+                        ->orWhere('id', 'LIKE', '%' . $search . '%');
+                })
+                ->orWhere('name', 'LIKE', '%' . $search . '%')
                 ->orWhere('id', 'LIKE', '%' . $search . '%')
+                ->orderBy('updated_at', 'DESC')
                 ->paginate(10);
         } else {
-            $products = Products::paginate(10);
+            $products = Products::orderBy('updated_at', 'DESC')->paginate(10);
         }
 
         return view('products.index', ['products' => $products]);
@@ -44,33 +56,17 @@ class ProductsController extends Controller
     public function store(Request $request): RedirectResponse
     {
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|max:40',
-            'supp_id' => Rule::exists('suppliers', 'id')->withoutTrashed(),
-            'cost' => 'required',
-            'VAT' => 'required',
-        ], [
-            'name' => 'Name is required.',
-            'supp_id' => "Supplier doesn't exist",
-            'cost' => 'Cost is required',
-            'VAT' => 'VAT is required.',
-        ]);
+        $validator = $this->getValidator($request);
 
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator);
+            return Redirect::back()->withInput()->withErrors($validator);
         }
 
         $validated = $validator->validated();
 
-        $product = new Products();
-        $product->name = $validated['name'];
-        $product->description = $request->description;
-        $product->supp_id = $validated['supp_id'];
-        $product->cost = number_format($validated['cost'], 2, '.', '');
-        $product->VAT = $request->VAT;
-        $product->save();
+        Products::create(array_merge($validated, $request->only('description')));
 
-        return Redirect::route('products.index');
+        return Redirect::route('products.index')->with('success', 'Product successfully created!');
     }
 
     /**
@@ -81,52 +77,83 @@ class ProductsController extends Controller
         //
     }
 
+    public function get(Request $request): RedirectResponse
+    {
+
+        try {
+            $product = Products::findOrFail($request->prodId);
+        } catch (ModelNotFoundException $exception) {
+            $message = "Product doesn't exist";
+        }
+
+        return Redirect::back()->withInput([
+            'prodId' => $product->id ?? $request->suppId,
+            'prod_name' => $product->name ?? $message,
+            'prod_cost' => $product->cost ?? '',
+            'supp_VAT' => $product->VAT ?? '',
+            'prod_supp' => $product->supplier->id ?? '',
+            'valid' => isset($message) ? 'false' : 'true',
+        ]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $id): View
+    public
+    function edit(Products $product): View
     {
-        return view('products.edit', ['product' => Products::findOrFail($id)]);
+        return view('products.edit', ['product' => $product]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $id): RedirectResponse
+    public
+    function update(Request $request, Products $product): RedirectResponse
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|max:40',
-            'supp_id' => Rule::exists('suppliers', 'id')->withoutTrashed(),
-            'cost' => 'required',
-        ], [
-            'name' => 'Name is required.',
-            'supp_id' => "Supplier doesn't exist",
-            'cost' => 'Cost is required',
-        ]);
+        $validator = $this->getValidator($request);
 
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator);
+            return Redirect::back()->withInput()->withErrors($validator);
         }
 
         $validated = $validator->validated();
 
-        $product = Products::findOrFail($id);
-        $product->name = $validated['name'];
-        $product->description = $request->description;
-        $product->supp_id = $validated['supp_id'];
-        $product->cost = number_format($validated['cost'], 2, '.', '');
-        $product->VAT = $request->VAT;
-        $product->save();
+        $product->update(array_merge($validated, $request->only('description')));
 
-        return Redirect::route('products.index');
+        return Redirect::route('products.index')->with('success', 'Product successfully updated!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id): RedirectResponse
+    public
+    function destroy(Products $product): RedirectResponse
     {
-        Products::findOrFail($id)->delete();
-        return Redirect::route('products.index');
+        try {
+            $product->delete();
+            $msg = ['success' => 'Supplier successfully deleted!'];
+        } catch (QueryException $e) {
+            $msg = ['error' => 'Failed to delete'];
+        }
+        return Redirect::route('products.index')->with($msg);
+    }
+
+    private
+    function getValidator(Request $request): ValidatorObj
+    {
+
+        return Validator::make($request->all(), [
+            'name' => 'required|max:40',
+            'supp_id' => Rule::exists('suppliers', 'id'),
+            'cost' => 'required|decimal:2',
+            'VAT' => 'required|numeric|integer',
+        ], [
+            'name' => 'Name is required.',
+            'supp_id' => "Supplier doesn't exist",
+            'cost.required' => 'Cost is required',
+            'cost.decimal:2' => 'Must be decimal.',
+            'VAT.required' => 'VAT is required',
+        ]);
     }
 }

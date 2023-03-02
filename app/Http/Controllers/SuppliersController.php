@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Suppliers;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Validator as ValidatorObj;
 use Illuminate\View\View;
 
 class SuppliersController extends Controller
@@ -20,12 +23,13 @@ class SuppliersController extends Controller
         if (isset($search)) {
             $suppliers = Suppliers::query()
                 ->where('name', 'LIKE', '%' . $search . '%')
-                ->orWhere('id','LIKE','%' . $search . '%')
-                ->orWhere('city','LIKE', '%' . $search . '%')
-                ->orWhere('country','LIKE', '%' . $search . '%')
-                ->paginate(10);
+                ->orWhere('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('city', 'LIKE', '%' . $search . '%')
+                ->orWhere('country', 'LIKE', '%' . $search . '%')
+                ->orderBy('updated_at', 'DESC')
+                ->paginate(10)->perPage();
         } else {
-            $suppliers = Suppliers::paginate(10);
+            $suppliers = Suppliers::orderBy('updated_at', 'DESC')->paginate(10);
         }
 
         return view('suppliers.index', ['suppliers' => $suppliers]);
@@ -44,84 +48,91 @@ class SuppliersController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-
-        $validator = Validator::make($request->all(),[
-            'name' => 'required|max:50',
-            'address' => 'required|max:255',
-            'city' => 'required|max:100',
-            'country' => 'required|max:100',
-            "email" => 'email:rfc'
-        ]);
+        $validator = $this->getValidator($request);
 
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator);
+            return Redirect::back()->withInput()->withErrors($validator);
         }
 
         $validated = $validator->validated();
+        Suppliers::create($validated);
 
-        $supplier = new Suppliers();
-        $supplier->name = $validated['name'];
-        $supplier->address = $validated['address'];
-        $supplier->city = $validated['city'];
-        $supplier->country = $validated['country'];
-        $supplier->email = $validated['email'];
-        $supplier->save();
-
-        return Redirect::route('suppliers.index');
+        return Redirect::route('suppliers.index')->with('success', 'Supplier successfully created!');
     }
 
     /**
-     * Display the specified resource.
+     * Get the specified resource to update inputs.
      */
-    public function show(Suppliers $suppliers)
+    public function get(Request $request): RedirectResponse
     {
-        //
+        try {
+            $supplier = Suppliers::findOrFail($request->suppId);
+
+        } catch (ModelNotFoundException $exception) {
+            $message = "Supplier doesn't exist";
+        }
+
+        return Redirect::back()->withInput([
+            'suppId' => $supplier->id ?? $request->suppId,
+            'supp_name' => $supplier->name ?? $message,
+            'supp_address' => $supplier->address ?? '',
+            'supp_city' => $supplier->city ?? '',
+            'supp_country' => $supplier->country ?? '',
+            'supp_email' => $supplier->email ?? '',
+            'valid' => isset($message) ? 'false' : 'true',
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $id): View
+    public function edit(Suppliers $supplier): View
     {
-        return view('suppliers.edit', ['supplier' => Suppliers::findOrFail($id)]);
+        return view('suppliers.edit', ['supplier' => $supplier]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $id): RedirectResponse
+    public function update(Request $request, Suppliers $supplier): RedirectResponse
     {
-        $validator = Validator::make($request->all(),[
-            'name' => 'required|max:50',
-            'address' => 'required|max:255',
-            'city' => 'required|max:100',
-            'country' => 'required|max:100',
-            "email" => 'email:rfc'
-        ]);
+        $validator = $this->getValidator($request);
 
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator);
+            return Redirect::back()->withInput()->withErrors($validator);
         }
 
         $validated = $validator->validated();
 
-        $supplier = Suppliers::findOrFail($id);
-        $supplier->name = $validated['name'];
-        $supplier->address = $validated['address'];
-        $supplier->city = $validated['city'];
-        $supplier->country = $validated['country'];
-        $supplier->email = $validated['email'];
-        $supplier->save();
+        $supplier->update($validated);
 
-        return Redirect::route('suppliers.index');
+        return Redirect::route('suppliers.index')->with('success', 'Supplier successfully updated!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id): RedirectResponse
+    public function destroy(Suppliers $supplier): RedirectResponse
     {
-        Suppliers::findOrFail($id)->delete();
-        return Redirect::route('suppliers.index');
+        try {
+            $supplier->delete();
+            $msg = ['success' => 'Supplier successfully deleted!'];
+        } catch (QueryException $e) {
+            $msg = ['error' => 'Failed to delete'];
+        }
+        return Redirect::route('purchase_orders.index')->with($msg);
+    }
+
+    private
+    function getValidator(Request $request): ValidatorObj
+    {
+        return Validator::make($request->all(),
+            [
+                'name' => 'required|max:50|unique:suppliers',
+                'address' => 'required|max:255',
+                'city' => 'required|max:100',
+                'country' => 'required|max:100',
+                "email" => 'email:rfc'
+            ]);
     }
 }
