@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('suppliers', function (Blueprint $table) {
-            $table->increments('id')->from(10000);
-            $table->string('name', 50);
-            $table->string('address', 255);
-            $table->string('city',100);
-            $table->string('country', 100);
-            $table->string('email',320);
+        Schema::create('purchase_orders', function (Blueprint $table) {
+            $table->id()->startingValue(1000000);
+            $table->string('type',2)->default('PO');
+            $table->integer('supp_id')->unsigned();
+            $table->foreign('supp_id')->references('id')->on('suppliers');
+            $table->date('order_date');
+            $table->date('requested_date');
+            $table->smallInteger('payment_terms');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('suppliers');
+        Schema::dropIfExists('purchase_orders');
     }
 };

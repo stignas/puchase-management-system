@@ -58,7 +58,12 @@
         </form>
         <!-- Location Info -->
         @section('current-page')
-            Products/Edit
+            @if(session()->has('success'))
+                <span class="text-success">{{ session()->pull('success') }}</span> /
+            @elseif(session()->has('error'))
+                <span class="text-danger">  {{  session()->pull('error') }}</span> /
+            @endif
+            Products / Edit
         @endsection
     </div>
 </x-app-layout>

@@ -46,7 +46,6 @@
                     @enderror
                 </div>
             </div>
-
             <!-- Buttons -->
             <div class="row">
                 <a href="{{ route('products.index') }}" class="btn btn-warning d-block w-25 my-3 m-auto">Back</a>
@@ -55,7 +54,7 @@
         </form>
         <!-- Location Info -->
         @section('current-page')
-            Products/Create
+            Products / Create
         @endsection
     </div>
 </x-app-layout>
