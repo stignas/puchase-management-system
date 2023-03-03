@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseOrdersController;
@@ -26,14 +27,17 @@ Route::get('/', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 });
 
 // Resource Controllers
@@ -44,9 +48,11 @@ Route::middleware('auth')->group(function () {
         'products' => ProductsController::class,
         'purchase_orders' => PurchaseOrdersController::class,
         'purchase_orders.transactions' => TransactionsController::class,
-        ]);
+    ]);
     Route::post('/purchase_orders/create/supp_id', [SuppliersController::class, 'get'])->name('suppliers.get');
     Route::post('/purchase_orders/edit/prod_id/{order}', [ProductsController::class, 'get'])->name('products.get');
+    Route::get('/generate-pdf/{purchaseOrder}', [PurchaseOrdersController::class, 'generatePDF'])->name('generate-pdf');
 });
 
-require __DIR__.'/auth.php';
+
+require __DIR__ . '/auth.php';

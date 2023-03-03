@@ -76,7 +76,7 @@ class TransactionsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(PurchaseOrders $purchaseOrder, Transactions $transaction, Request $request): View|RedirectResponse
+    public function update(PurchaseOrders $purchaseOrder, Transactions $transaction, Request $request): RedirectResponse
     {
         $validator = $this->getValidator($request);
 
