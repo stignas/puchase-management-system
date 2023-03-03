@@ -31,7 +31,7 @@ class PurchaseOrdersController extends Controller
                         ->Where('name', 'LIKE', '%' . $search . '%')
                         ->orWhere('id', 'LIKE', '%' . $search . '%');
                 })
-                ->orWhere('.purchase_orders.id', 'LIKE', '%' . $search . '%')
+                ->orWhere('id', 'LIKE', '%' . $search . '%')
                 ->orWhere('order_date', 'LIKE', '%' . $search . '%')
                 ->orWhere('requested_date', 'LIKE', '%' . $search . '%')
                 ->orderBy('created_at', 'DESC')
