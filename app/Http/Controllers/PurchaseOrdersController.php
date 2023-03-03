@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\PurchaseOrders;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Validator as ValidatorObj;
@@ -28,7 +31,7 @@ class PurchaseOrdersController extends Controller
                         ->Where('name', 'LIKE', '%' . $search . '%')
                         ->orWhere('id', 'LIKE', '%' . $search . '%');
                 })
-                ->orWhere('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('.purchase_orders.id', 'LIKE', '%' . $search . '%')
                 ->orWhere('order_date', 'LIKE', '%' . $search . '%')
                 ->orWhere('requested_date', 'LIKE', '%' . $search . '%')
                 ->orderBy('created_at', 'DESC')
@@ -128,4 +131,31 @@ class PurchaseOrdersController extends Controller
         ]);
     }
 
+    public function generatePDF(PurchaseOrders $purchaseOrder): Response
+    {
+        $transactions = [];
+        $products = [];
+        foreach ($purchaseOrder->transactions as $transaction) {
+            $amount = $transaction->quantity * $transaction->cost;
+            $vatAmount = $amount * $transaction->product->VAT / 100;
+            $transaction['amount'] = $this->formatFloat($amount);
+            $transaction['amountVAT'] = $this->formatFloat($vatAmount);
+            $purchaseOrder['total'] += $this->formatFloat($amount);
+            $purchaseOrder['totalVAT'] += $this->formatFloat($vatAmount);
+            $transactions[] = $transaction;
+            $products[] = $transaction->product;
+        }
+        $supplier = $purchaseOrder->supplier->toArray();
+        $data = array_merge($purchaseOrder->toArray());
+        $data = view()->share('data', $data);
+
+        $pdf = PDF::loadView('po-pdf', $data);
+
+        return $pdf->download('po' . $purchaseOrder->id .'.pdf');
+    }
+
+    private function formatFloat(float $float): float
+    {
+        return (float)number_format($float, 2, '.', '');
+    }
 }

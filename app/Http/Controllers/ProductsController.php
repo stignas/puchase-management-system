@@ -90,7 +90,7 @@ class ProductsController extends Controller
             'prodId' => $product->id ?? $request->suppId,
             'prod_name' => $product->name ?? $message,
             'prod_cost' => $product->cost ?? '',
-            'supp_VAT' => $product->VAT ?? '',
+            'prod_VAT' => $product->VAT ?? '',
             'prod_supp' => $product->supplier->id ?? '',
             'valid' => isset($message) ? 'false' : 'true',
         ]);

@@ -63,7 +63,7 @@
                     @method('DELETE')
                     <button class="btn btn-danger btn-block m-1 w-100" type="submit">Delete</button>
                 </form>
-                <button class="btn btn-primary btn-block disabled m-1 w-100">Print</button>
+                <a href="{{ route('generate-pdf', $purchaseOrder) }}" class="btn btn-primary btn-block m-1 w-100">Print</a>
                 <a href="{{ route('purchase_orders.index') }}" class="btn btn-success btn-block m-1 w-100">Save</a>
             </div>
         </div>
@@ -89,7 +89,7 @@
                         <tr class="row d-flex align-items-center">
                             <td class="scope-col col-md-2">
                                 <div class="form-group">
-                                    <input name="prod_name" class="form-control my-2"
+                                    <input name="prod_id" class="form-control my-2"
                                            value="{{ $transaction->product->id }}"
                                            disabled>
                                 </div>
@@ -103,13 +103,13 @@
                             </td>
                             <td class="scope-col col-md-1">
                                 <div class="form-group">
-                                    <input name="prod_name" class="form-control my-2" value="{{ $transaction->cost }}"
+                                    <input name="prod_cost" class="form-control my-2" value="{{ $transaction->cost }}"
                                            disabled>
                                 </div>
                             </td>
                             <td class="scope-col col-md-1">
                                 <div class="form-group">
-                                    <input name="prod_name" class="form-control my-2"
+                                    <input name="prod_vat" class="form-control my-2"
                                            value="{{ $transaction->product->VAT }}"
                                            disabled>
                                 </div>
@@ -184,7 +184,7 @@
                     </td>
                     <td class="col-md-1">
                         <div class="form-group">
-                            <input name="prod_cost" class="form-control my-2" value="{{ old('prod_VAT') }}"
+                            <input name="prod_vat" class="form-control my-2" value="{{ old('prod_VAT') }}"
                                    disabled>
                         </div>
                     </td>
