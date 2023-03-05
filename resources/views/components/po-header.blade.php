@@ -61,6 +61,10 @@
             @method('DELETE')
             <button class="btn btn-danger m-1 w-100" type="submit">Cancel/Delete</button>
         </form>
+        <a class="btn btn-secondary m-1 w-100 d-block" id="po-btn">Import XLS</a>
+        <div class="modal" id="po-modal">
+            @include('purchase-orders.import')
+        </div>
         <a href="{{ route('po-pdf', $purchaseOrder) }}" class="btn btn-primary m-1 w-100 d-block">Download
             PDF</a>
         <a href="{{ route('receiving_orders.create') }}" class="btn btn-warning m-1 w-100 d-block">Receive</a>

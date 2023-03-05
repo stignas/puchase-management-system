@@ -55,6 +55,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/purchase_orders/edit/prod_id/', [ProductsController::class, 'get'])->name('products.get');
     Route::get('/generate-po-pdf/{purchaseOrder}', [PurchaseOrdersController::class, 'generatePDF'])->name('po-pdf');
     Route::get('/generate-ro-pdf/{receivingOrder}', [ReceivingOrdersController::class, 'generatePDF'])->name('ro-pdf');
+    Route::get('/import-po/import/{purchaseOrder}', [PurchaseOrdersController::class, 'import'])->name('po-import.form');
+    Route::post('/import-po/import/{purchaseOrder}', [TransactionsController::class, 'import'])->name('po-import');
 });
 
 require __DIR__ . '/auth.php';

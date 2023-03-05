@@ -21,9 +21,7 @@
                 <div class="form-group col-md-9">
                     <input name="supp_name" class="form-control my-2" value="{{ old('supp_name') }}" disabled>
                 </div>
-
             </div>
-
         </form>
         @if(old('valid') === 'true')
             <div class="text-primary w-50 m-auto form-group">
@@ -104,6 +102,9 @@
         @endif
         <!-- Location Info -->
         @section('current-page')
+            @if(session()->has('error') || session()->has('success'))
+                <p class="alert alert-danger">{{ session()->pull('error') }} / {{ session()->pull('success') }}</p>
+            @endif
             Purchase Orders / Create
         @endsection
     </div>
