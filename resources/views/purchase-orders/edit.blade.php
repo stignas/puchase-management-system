@@ -157,7 +157,7 @@
         @elseif(session()->has('error'))
             <span class="text-danger">  {{  session()->pull('error') }}</span> /
         @endif
-        Purchase Orders >> Transactions / Create
+        Purchase Order / Edit
     @endsection
 </x-app-layout>
 

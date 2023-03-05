@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\PoTransactionsImport;
 use App\Models\PurchaseOrders;
 use App\Models\Transactions;
 use Illuminate\Database\QueryException;
@@ -12,10 +13,25 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator as ValidatorObj;
-use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TransactionsController extends Controller
 {
+
+    public function import(Request $request, PurchaseOrders $purchaseOrder): RedirectResponse
+    {
+        $import = new PoTransactionsImport($purchaseOrder);
+
+        try {
+            Excel::import($import, $request->file('file'));
+            $msg = ['success' => 'Uploaded'];
+        } catch (\Exception $e) {
+            $msg = ['error' => 'Upload failed'];
+        }
+
+        return Redirect::back()->with($msg);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -69,7 +85,6 @@ class TransactionsController extends Controller
         }
 
         $validated = $validator->validated();
-
         $transaction->updateOrFail($validated);
 
         return Redirect::back()->with(['success' => 'Transaction updated!', 'purchaseOrder' => $purchaseOrder]);
@@ -91,8 +106,7 @@ class TransactionsController extends Controller
     }
 
 
-    private
-    function getValidator(Request $request): ValidatorObj
+    public function getValidator(Request $request): ValidatorObj
     {
         return Validator::make($request->all(), [
             'product_id' => Rule::exists('products', 'id'),

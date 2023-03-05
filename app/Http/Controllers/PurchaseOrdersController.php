@@ -131,7 +131,6 @@ class PurchaseOrdersController extends Controller
      */
     public function generatePDF(PurchaseOrders $purchaseOrder): Response
     {
-
         $this->getPoTotals($purchaseOrder);
         $purchaseOrder->supplier->toArray();
         $data = array_merge($purchaseOrder->toArray());
@@ -188,10 +187,18 @@ class PurchaseOrdersController extends Controller
                 ->orWhere('order_date', 'LIKE', '%' . $search . '%')
                 ->orWhere('requested_date', 'LIKE', '%' . $search . '%')
                 ->orderBy('order_date', 'DESC')
+                ->orderBy('requested_date', 'DESC')
                 ->paginate(10);
         } else {
-            $purchaseOrders = PurchaseOrders::paginate(10);
+            $purchaseOrders = PurchaseOrders::orderBy('order_date', 'DESC')
+                ->orderBy('requested_date', 'DESC')
+                ->paginate(10);
         }
         return $purchaseOrders;
+    }
+
+    public function import(PurchaseOrders $purchaseOrder): View
+    {
+        return view('purchase-orders.import', ['purchaseOrder' => $purchaseOrder]);
     }
 }

@@ -41,7 +41,7 @@
     <div class="">
         &COPY 2023. All rights reserved
     </div>
-    {{  Route::currentRouteName() }}
+    <!-- Location info from location views -->
     <div>
         @yield('current-page')
     </div>

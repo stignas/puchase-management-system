@@ -1,9 +1,11 @@
 <x-app-layout>
     <div class="container-xl shadow rounded bg-light py-3 my-2">
         <div class="d-flex justify-content-between align-items-center">
+            <!-- Title -->
             <div class="py-3 text-secondary">
                 <h1 class="text-center text-secondary">Products</h1>
             </div>
+            <!-- Search -->
             <div class="py-3">
                 <form method="get" action="{{ route('products.index') }}" role="search"
                       class="d-flex justify-content-around" id="search-form">
@@ -18,6 +20,7 @@
                     <button type="submit" class="btn btn-secondary d-inline-block m-1">Search</button>
                 </form>
             </div>
+            <!-- Create New -->
             <div class="py-3">
                 <a href="{{ route('products.create') }}" class="btn btn-danger">+ Create New</a>
             </div>
@@ -35,7 +38,6 @@
             </tr>
             <!-- Table records -->
             @foreach($products as $product)
-
                 <tr>
                     <td><a class="text-primary-emphasis text-decoration-none"
                            href="{{ route('products.edit', $product->id) }}">
@@ -44,7 +46,6 @@
                     <td class="overflow-x-hidden text-truncate">{{ $product->description }}</td>
                     <td class="text-truncate">{{ $product->supplier->id }} / {{ $product->supplier->name }}</td>
                     <td>{{ $product->cost }}</td>
-
                     <!-- Action button -->
                     <td>
                         <div class="btn-group dropup">
@@ -76,9 +77,10 @@
                 </tr>
             @endforeach
         </table>
+        <!-- Paginator links -->
         {{ $products->onEachSide(1)->links() }}
     </div>
-    <!-- Location Info -->
+    <!-- Location Info send to App-layout footer -->
     @section('current-page')
         @if(session()->has('success'))
             <span class="text-success">{{ session()->pull('success') }}</span> /
