@@ -16,7 +16,9 @@
             <span class="mx-2">Purchase</span>
         </a>
 
-        <a class="nav-link d-flex btn my-2 link-warning nav-item disabled" href="#">
+        <a class="nav-link d-flex btn my-2 link-warning nav-item disabled
+        {{ (str_contains(Route::currentRouteName(), 'receiving_orders')) ? 'active' : '' }}"
+           href="{{ route('receiving_orders.index') }}">
             <img src="{{ asset('assets/img/icons/boxes-packing-solid.svg') }}" width="20px" height="20px"
                  class="svg-warning" alt="boxes">
             <span class="mx-2">Receiving</span>

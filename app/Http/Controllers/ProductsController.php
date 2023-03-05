@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Products;
-use App\Models\PurchaseOrders;
-use App\Models\Suppliers;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Validator as ValidatorObj;
@@ -24,20 +23,7 @@ class ProductsController extends Controller
     public function index(Request $request): View
     {
         $search = $request->input('search');
-
-        if (isset($search)) {
-            $products = Products::query()
-                ->whereHas('supplier', function (Builder $query) use ($search) {
-                    return $query->where('name', 'LIKE', '%' . $search . '%')
-                        ->orWhere('id', 'LIKE', '%' . $search . '%');
-                })
-                ->orWhere('name', 'LIKE', '%' . $search . '%')
-                ->orWhere('id', 'LIKE', '%' . $search . '%')
-                ->orderBy('updated_at', 'DESC')
-                ->paginate(10);
-        } else {
-            $products = Products::orderBy('updated_at', 'DESC')->paginate(10);
-        }
+        $products = $this->search($search);
 
         return view('products.index', ['products' => $products]);
     }
@@ -55,7 +41,6 @@ class ProductsController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-
         $validator = $this->getValidator($request);
 
         if ($validator->fails()) {
@@ -63,23 +48,16 @@ class ProductsController extends Controller
         }
 
         $validated = $validator->validated();
-
         Products::create(array_merge($validated, $request->only('description')));
 
         return Redirect::route('products.index')->with('success', 'Product successfully created!');
     }
 
     /**
-     * Display the specified resource.
+     * Get the specified resource to update inputs.
      */
-    public function show(Products $products)
-    {
-        //
-    }
-
     public function get(Request $request): RedirectResponse
     {
-
         try {
             $product = Products::findOrFail($request->prodId);
         } catch (ModelNotFoundException $exception) {
@@ -99,8 +77,7 @@ class ProductsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public
-    function edit(Products $product): View
+    public function edit(Products $product): View
     {
         return view('products.edit', ['product' => $product]);
     }
@@ -108,8 +85,7 @@ class ProductsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public
-    function update(Request $request, Products $product): RedirectResponse
+    public function update(Request $request, Products $product): RedirectResponse
     {
         $validator = $this->getValidator($request);
 
@@ -118,7 +94,6 @@ class ProductsController extends Controller
         }
 
         $validated = $validator->validated();
-
         $product->update(array_merge($validated, $request->only('description')));
 
         return Redirect::route('products.index')->with('success', 'Product successfully updated!');
@@ -127,8 +102,7 @@ class ProductsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public
-    function destroy(Products $product): RedirectResponse
+    public function destroy(Products $product): RedirectResponse
     {
         try {
             $product->delete();
@@ -139,8 +113,10 @@ class ProductsController extends Controller
         return Redirect::route('products.index')->with($msg);
     }
 
-    private
-    function getValidator(Request $request): ValidatorObj
+    /**
+     * Validate input for store and update.
+     */
+    private function getValidator(Request $request): ValidatorObj
     {
 
         return Validator::make($request->all(), [
@@ -155,5 +131,27 @@ class ProductsController extends Controller
             'cost.decimal:2' => 'Must be decimal.',
             'VAT.required' => 'VAT is required',
         ]);
+    }
+
+    /**
+     * Return search results
+     */
+    public function search(?string $search): LengthAwarePaginator
+    {
+        if (!empty($search)) {
+            $products = Products::query()
+                ->whereHas('supplier', function (Builder $query) use ($search) {
+                    return $query->where('name', 'LIKE', '%' . $search . '%')
+                        ->orWhere('id', 'LIKE', '%' . $search . '%');
+                })
+                ->orWhere('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('id', 'LIKE', '%' . $search . '%')
+                ->orderBy('updated_at', 'DESC')
+                ->paginate(10);
+        } else {
+            $products = Products::orderBy('updated_at', 'DESC')->paginate(10);
+        }
+
+        return $products;
     }
 }

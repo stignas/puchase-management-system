@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Validator as ValidatorObj;
@@ -20,17 +21,7 @@ class SuppliersController extends Controller
     public function index(Request $request): View
     {
         $search = $request->input('search');
-        if (isset($search)) {
-            $suppliers = Suppliers::query()
-                ->where('name', 'LIKE', '%' . $search . '%')
-                ->orWhere('id', 'LIKE', '%' . $search . '%')
-                ->orWhere('city', 'LIKE', '%' . $search . '%')
-                ->orWhere('country', 'LIKE', '%' . $search . '%')
-                ->orderBy('updated_at', 'DESC')
-                ->paginate(10)->perPage();
-        } else {
-            $suppliers = Suppliers::orderBy('updated_at', 'DESC')->paginate(10);
-        }
+        $suppliers = $this->search($search);
 
         return view('suppliers.index', ['suppliers' => $suppliers]);
     }
@@ -103,7 +94,6 @@ class SuppliersController extends Controller
         }
 
         $validated = $validator->validated();
-
         $supplier->update($validated);
 
         return Redirect::route('suppliers.index')->with('success', 'Supplier successfully updated!');
@@ -120,11 +110,13 @@ class SuppliersController extends Controller
         } catch (QueryException $e) {
             $msg = ['error' => 'Failed to delete'];
         }
-        return Redirect::route('purchase_orders.index')->with($msg);
+        return Redirect::route('suppliers.index')->with($msg);
     }
 
-    private
-    function getValidator(Request $request): ValidatorObj
+    /**
+     * Validate input for store and update.
+     */
+    private function getValidator(Request $request): ValidatorObj
     {
         return Validator::make($request->all(),
             [
@@ -134,5 +126,25 @@ class SuppliersController extends Controller
                 'country' => 'required|max:100',
                 "email" => 'email:rfc'
             ]);
+    }
+
+    /**
+     * Return search results
+     */
+    public function search(?string $search): LengthAwarePaginator
+    {
+        if (!empty($search)) {
+            $suppliers = Suppliers::query()
+                ->where('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('city', 'LIKE', '%' . $search . '%')
+                ->orWhere('country', 'LIKE', '%' . $search . '%')
+                ->orderBy('updated_at', 'DESC')
+                ->paginate(10);
+        } else {
+            $suppliers = Suppliers::orderBy('updated_at', 'DESC')->paginate(10);
+        }
+
+        return $suppliers;
     }
 }

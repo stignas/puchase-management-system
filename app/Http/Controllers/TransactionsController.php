@@ -17,22 +17,6 @@ use Illuminate\View\View;
 class TransactionsController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index(): View
-    {
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(): View
-    {
-
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request, PurchaseOrders $purchaseOrder): RedirectResponse
@@ -45,7 +29,7 @@ class TransactionsController extends Controller
 
         $validated = $validator->validated();
 
-        $transaction = $purchaseOrder
+        $purchaseOrder
             ->transactions()
             ->create(array_merge([
                 'supplier_id' => $purchaseOrder->supplier->id,
@@ -112,7 +96,7 @@ class TransactionsController extends Controller
     {
         return Validator::make($request->all(), [
             'product_id' => Rule::exists('products', 'id'),
-            'quantity' => 'required|numeric|integer',
+            'quantity' => 'required|numeric|integer|min:1',
             'cost' => 'required|decimal:2'
 
         ], [

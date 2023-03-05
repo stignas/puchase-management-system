@@ -11,14 +11,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class PurchaseOrders extends Model
 {
     use HasFactory;
-    use SoftDeletes;
 
     protected $fillable = [
         'type',
         'supp_id',
         'order_date',
         'requested_date',
-        'payment_terms'
+        'payment_terms',
     ];
 
     public function supplier(): HasOne

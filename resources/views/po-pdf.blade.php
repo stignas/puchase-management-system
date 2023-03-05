@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="lt">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -42,33 +42,38 @@
         <table class="w-100 py-5">
             <tbody>
             <tr class="py-2">
-                <th>Product #</th>
-                <th>Name</th>
-                <th>Price, €</th>
-                <th>VAT, %</th>
-                <th>Quantity</th>
-                <th>VAT</th>
-                <th>Amount</th>
+                <th class="text-start px-2">Product #</th>
+                <th class="text-start px-2">Name</th>
+                <th class="text-end px-2">Price, €</th>
+                <th class="text-end px-2">VAT, %</th>
+                <th class="text-end px-2">Quantity</th>
+                <th class="text-end px-2">VAT</th>
+                <th class="text-end px-2">Amount</th>
             </tr>
-            @foreach( $data['transactions'] as $transaction)
-                <tr class="py-2">
-                    <td>{{ $transaction['product_id'] }}</td>
-                    <td>{{ $transaction['product']['name'] }}</td>
-                    <td>{{ number_format($transaction['cost'],2,'.','') }}</td>
-                    <td>{{ number_format($transaction['product']['VAT'],2,'.','') }}</td>
-                    <td>{{ $transaction['quantity'] }}</td>
-                    <td>{{ number_format($transaction['amountVAT'],2,'.','') }}</td>
-                    <td>{{ number_format($transaction['amount'],2,'.','') }}</td>
-                </tr>
-            @endforeach
+            @if( !empty($data['transactions']) )
+                @foreach( $data['transactions'] as $transaction)
+                    <tr class="py-2">
+                        <td class="text-start px-2">{{ $transaction['product_id'] }}</td>
+                        <td class="text-start px-2">{{ $transaction['product']['name']}}</td>
+                        <td class="text-end px-2">{{ number_format($transaction['cost'],2,'.','') }}</td>
+                        <td class="text-end px-2">{{ number_format($transaction['product']['VAT'],2,'.','') }}</td>
+                        <td class="text-end px-2">{{ $transaction['quantity'] }}</td>
+                        <td class="text-end px-2">{{ number_format($transaction['amountVAT'],2,'.','') }}</td>
+                        <td class="text-end px-2">{{ number_format($transaction['amount'],2,'.','') }}</td>
+                    </tr>
+                @endforeach
 
-            <tr class="py-5">
-                <td colspan=2>
-                    <p><span style="font-weight: bold">Total VAT:</span> {{ number_format($data['totalVAT'],2,'.','') }}
-                    </p>
-                    <p><span style="font-weight: bold">Total:</span> {{ number_format($data['total'],2,'.','') }}</p>
-                </td>
-            </tr>
+
+                <tr class="py-5">
+                    <td colspan=2>
+                        <p><span
+                                style="font-weight: bold">Total VAT:</span> {{ number_format($data['totalVAT'],2,'.','') }}
+                        </p>
+                        <p><span style="font-weight: bold">Total:</span> {{ number_format($data['total'],2,'.','') }}
+                        </p>
+                    </td>
+                </tr>
+            @endif
             </tbody>
         </table>
     </div>

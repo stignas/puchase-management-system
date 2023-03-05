@@ -21,9 +21,7 @@
                 <div class="form-group col-md-9">
                     <input name="supp_name" class="form-control my-2" value="{{ old('supp_name') }}" disabled>
                 </div>
-
             </div>
-
         </form>
         @if(old('valid') === 'true')
             <div class="text-primary w-50 m-auto form-group">
@@ -96,11 +94,6 @@
                     <button class="d-block btn btn-info w-25 my-3 m-auto" type="submit">Next</button>
                 </div>
             </form>
-        @else
-            <div class="m-auto text-center w-50">
-                <a href="{{ route('purchase_orders.index') }}" class="btn btn-success m-1 w-25">Back to
-                    List</a>
-            </div>
         @endif
         <!-- Location Info -->
         @section('current-page')

@@ -11,11 +11,24 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ReceivingOrders extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+
+    protected $fillable = [
+        'type',
+        'supp_id',
+        'order_date',
+        'actual_date',
+        'po_reference',
+        'supplier_so',
+    ];
 
     public function supplier(): HasOne
     {
         return $this->hasOne(Suppliers::class, 'id', 'supp_id');
+    }
+
+    public function purchaseOrder(): HasOne
+    {
+    return $this->hasOne(PurchaseOrders::class,'id','po_reference');
     }
 
     public function transactions(): MorphMany
