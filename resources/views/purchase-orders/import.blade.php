@@ -8,16 +8,7 @@
             <button class="btn btn-secondary w-25 m-auto" type="submit">Upload</button>
             <div id="close" class="close">&times;</div>
         </div>
-        <div>
-            @if(session()->has('error'))
-                <p class="text-danger">{{ session()->pull('error') }}</p>
-            @elseif(session()->has('success'))
-                <p class="text-danger">{{ session()->pull('success') }}</p>
-            @endif
-        </div>
     </div>
-
-
 </form>
 
 

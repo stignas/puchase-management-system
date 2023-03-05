@@ -102,8 +102,11 @@
         @endif
         <!-- Location Info -->
         @section('current-page')
-            @if(session()->has('error') || session()->has('success'))
-                <p class="alert alert-danger">{{ session()->pull('error') }} / {{ session()->pull('success') }}</p>
+            @if(session()->has('error'))
+                <p class="alert alert-danger">{{ session()->pull('error') }}</p>
+            @endif
+            @if(session()->has('success'))
+                    <p class="alert alert-success">{{ session()->pull('success') }}</p>
             @endif
             Purchase Orders / Create
         @endsection

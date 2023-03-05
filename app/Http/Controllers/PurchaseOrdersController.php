@@ -56,7 +56,7 @@ class PurchaseOrdersController extends Controller
 
         $purchaseOrder = PurchaseOrders::create(array_merge(['type' => 'PO'], $validated));
 
-        return Redirect::route('purchase_orders.edit', $purchaseOrder)->withErrors();
+        return Redirect::route('purchase_orders.edit', $purchaseOrder);
     }
 
     /**
