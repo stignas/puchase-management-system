@@ -5,10 +5,10 @@
                 <h1 class="text-center text-secondary">Purchase Orders</h1>
             </div>
             <div class="py-3">
-                <form method="get" action="{{ route('purchase_orders.index') }}" role="search"
+                <form method="get" action="{{ route('receiving_orders.index') }}" role="search"
                       class="d-flex justify-content-around" id="search-form">
                     @csrf
-                    <a class="btn btn-danger m-1" href="{{ route('purchase_orders.index') }}">
+                    <a class="btn btn-danger m-1" href="{{ route('receiving_orders.index') }}">
                         <img class="svg-light" src="{{ asset('/assets/img/icons/arrow-rotate-left-solid.svg') }}"
                              width="16px" height="16px" alt="arrow">
                     </a>
@@ -19,30 +19,32 @@
                 </form>
             </div>
             <div class="py-3">
-                <a href="{{ route('purchase_orders.create') }}" class="btn btn-danger">+ Create New</a>
+                <a href="{{ route('receiving_orders.create') }}" class="btn btn-danger disabled">+ Create New</a>
             </div>
         </div>
         <!-- List table -->
         <table class="table table-hover">
             <!-- Table headers -->
             <tr class="bg-dark-subtle">
-                <th class="scope-col col-1">PO #</th>
+                <th class="scope-col col-1">RO #</th>
+                <th class="scope-col col-1">PO Reference</th>
                 <th class="scope-col col-1">Order date</th>
-                <th class="scope-col col-1">Requested date</th>
+                <th class="scope-col col-1">Actual date</th>
                 <th class="scope-col col-3">Supplier Code / Name</th>
-                <th class="scope-col col-1">Amount</th>
                 <th class="scope-col col-1">Action</th>
             </tr>
             <!-- Table records -->
-            @foreach($purchaseOrders as $purchaseOrder)
+            @foreach($receivingOrders as $receivingOrder)
                 <tr>
                     <td><a class="text-primary-emphasis text-decoration-none"
-                           href="{{ route('purchase_orders.edit', $purchaseOrder->id) }}">
-                            {{ $purchaseOrder->id }}</a></td>
-                    <td>{{ $purchaseOrder->order_date }}</td>
-                    <td>{{ $purchaseOrder->requested_date }}</td>
-                    <td>{{ $purchaseOrder->supplier->id }} // {{ $purchaseOrder->supplier->name }}</td>
-                    <td>{{ $purchaseOrder->total }}</td>
+                           href="{{ route('receiving_orders.edit', $receivingOrder->id) }}">
+                            {{ $receivingOrder->id }}</a></td>
+                    <td><a class="text-primary-emphasis text-decoration-none"
+                           href="{{ route('purchase_orders.edit', $receivingOrder->po_reference) }}">
+                            {{ $receivingOrder->id }}</a></td>
+                    <td>{{ $receivingOrder->order_date }}</td>
+                    <td>{{ $receivingOrder->actual_date }}</td>
+                    <td>{{ $receivingOrder->supplier->id }} // {{ $receivingOrder->supplier->name }}</td>
                     <!-- Action button -->
                     <td>
                         <div class="btn-group dropup">
@@ -53,7 +55,7 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-dark">
                                 <!-- Delete action -->
-                                <form method="post" action="{{ route('purchase_orders.destroy', $purchaseOrder->id) }}">
+                                <form method="post" action="{{ route('receiving_orders.destroy', $receivingOrder->id) }}">
                                     @csrf
                                     @method('delete')
                                     <button type="submit" class="btn btn-link link-danger dropdown-item">
@@ -64,7 +66,7 @@
                                 </form>
                                 <!-- Edit action -->
                                 <a class="dropdown-item link-warning"
-                                   href="{{ route('purchase_orders.edit', $purchaseOrder->id) }}">
+                                   href="{{ route('receiving_orders.edit', $receivingOrder->id) }}">
                                     <img src="{{ asset('assets/img/icons/pen-to-square-solid.svg') }}" width="20px"
                                          height="20px" alt="pen"
                                          class="p-1 svg-warning">Edit</a>
@@ -74,13 +76,13 @@
                 </tr>
             @endforeach
         </table>
-        {{ $purchaseOrders->onEachSide(1)->links() }}
+        {{ $receivingOrders->onEachSide(1)->links() }}
     </div>
     <!-- Location Info -->
     @section('current-page')
         @if(session()->has('success'))
             <span class="text-success">{{ session()->pull('success') }} /</span>
         @endif
-        <span>Purchase Orders</span>
+        <span>Receiving Orders</span>
     @endsection
 </x-app-layout>

@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseOrdersController;
+use App\Http\Controllers\ReceivingOrdersController;
 use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\TransactionsController;
 use Illuminate\Support\Facades\Route;
@@ -42,17 +42,19 @@ Route::middleware('auth')->group(function () {
 
 // Resource Controllers
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::resources([
         'suppliers' => SuppliersController::class,
         'products' => ProductsController::class,
         'purchase_orders' => PurchaseOrdersController::class,
         'purchase_orders.transactions' => TransactionsController::class,
+        'receiving_orders' => ReceivingOrdersController::class,
+        'receiving_orders.transactions' => TransactionsController::class,
     ]);
     Route::post('/purchase_orders/create/supp_id', [SuppliersController::class, 'get'])->name('suppliers.get');
-    Route::post('/purchase_orders/edit/prod_id/{order}', [ProductsController::class, 'get'])->name('products.get');
-    Route::get('/generate-pdf/{purchaseOrder}', [PurchaseOrdersController::class, 'generatePDF'])->name('generate-pdf');
+    Route::post('/purchase_orders/edit/prod_id/', [ProductsController::class, 'get'])->name('products.get');
+    Route::get('/generate-po-pdf/{purchaseOrder}', [PurchaseOrdersController::class, 'generatePDF'])->name('po-pdf');
+    Route::get('/generate-ro-pdf/{receivingOrder}', [ReceivingOrdersController::class, 'generatePDF'])->name('ro-pdf');
 });
-
 
 require __DIR__ . '/auth.php';
