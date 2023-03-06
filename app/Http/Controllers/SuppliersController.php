@@ -102,7 +102,7 @@ class SuppliersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Suppliers $supplier): RedirectResponse
+    public function destroy($orderId, Suppliers $supplier): RedirectResponse
     {
         try {
             $supplier->delete();
@@ -120,7 +120,7 @@ class SuppliersController extends Controller
     {
         return Validator::make($request->all(),
             [
-                'name' => 'required|max:50|unique:suppliers',
+                'name' => 'required|max:50',
                 'address' => 'required|max:255',
                 'city' => 'required|max:100',
                 'country' => 'required|max:100',

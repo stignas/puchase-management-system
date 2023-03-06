@@ -13,7 +13,7 @@
                     <th class="scope-col col-md-1">VAT</th>
                     <th class="scope-col col-md-1">Default Supplier #</th>
                     <th class="scope-col col-md-1">Quantity</th>
-                    <th class="scope-col col-md-1">Amount, €</th>
+                    <th class="scope-col col-md-2 text-center">Amount, €</th>
                     <th class="scope-col col-md-1">Delete</th>
                 </tr>
                 <!-- Populate existing transactions in PO -->
@@ -56,7 +56,7 @@
                                            disabled>
                                 </div>
                             </td>
-                            <!-- Transaction Update Form -->
+                            <!-- Transaction Update Quantity Field -->
                             <td class="scope-col col-md-1">
                                 <form method="post"
                                       action="{{ route('purchase_orders.transactions.update', [$purchaseOrder, $transaction->id]) }}"
@@ -71,12 +71,13 @@
                                            onchange="document.getElementById('{{$transaction->id}}').submit()">
                                 </form>
                             </td>
-                            <td class="scope-col col-md-1">
+                            <!-- Transaction Amount -->
+                            <td class="scope-col col-md-2">
                                 <input class="form-control text-end"
                                        value="{{ number_format($transaction->cost * $transaction->quantity,2,'.','') }}"
                                        disabled>
                             </td>
-                            <!-- Transaction Delete Form -->
+                            <!-- Transaction Delete -->
                             <td class="scope-col col-md-1">
                                 <form class="text-center" method="post"
                                       action="{{ route('purchase_orders.transactions.destroy', [$transaction->transactionable_id, $transaction]) }}">
@@ -92,7 +93,6 @@
                     @endforeach
                 @endif
                 <!-- Transaction Create Form -->
-
                 <tr class="row d-flex align-items-center">
                     <td class="col-md-1">
                         <!-- Get Product Parameters Form -->

@@ -67,7 +67,7 @@
         </div>
         <a href="{{ route('po-pdf', $purchaseOrder) }}" class="btn btn-primary m-1 w-100 d-block">Download
             PDF</a>
-        <a href="{{ route('receiving_orders.create') }}" class="btn btn-warning m-1 w-100 d-block">Receive</a>
+        <a href="#" class="btn btn-warning m-1 w-100 d-block disabled">Receive</a>
         <a href="{{ route('purchase_orders.index') }}" class="btn btn-success m-1 w-100 d-block">Back to
             List</a>
     </div>
