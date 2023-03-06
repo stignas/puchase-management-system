@@ -60,14 +60,6 @@ class PurchaseOrdersController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(PurchaseOrders $purchaseOrder): RedirectResponse
-    {
-        return Redirect::back();
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(PurchaseOrders $purchaseOrder): View
@@ -187,11 +179,11 @@ class PurchaseOrdersController extends Controller
                 ->orWhere('order_date', 'LIKE', '%' . $search . '%')
                 ->orWhere('requested_date', 'LIKE', '%' . $search . '%')
                 ->orderBy('order_date', 'DESC')
-                ->orderBy('requested_date', 'DESC')
+                ->orderBy('id', 'DESC')
                 ->paginate(10);
         } else {
             $purchaseOrders = PurchaseOrders::orderBy('order_date', 'DESC')
-                ->orderBy('requested_date', 'DESC')
+                ->orderBy('id', 'DESC')
                 ->paginate(10);
         }
         return $purchaseOrders;

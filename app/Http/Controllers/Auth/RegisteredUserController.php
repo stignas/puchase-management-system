@@ -4,23 +4,32 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
+
+    public function index(Request $request): View
+    {
+        $search = $request->input('search');
+        $users = $this->search($search);
+
+        return view('users.index', ['users' => $users]);
+    }
+
     /**
      * Display the registration view.
      */
     public function create(): View
     {
-        return view('auth.register');
+        return view('users.create');
     }
 
     /**
@@ -32,7 +41,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -44,8 +53,31 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
+        return Redirect::route('users.index')->with('success', 'New user registered.');
+    }
 
-        return redirect(RouteServiceProvider::HOME);
+    public function search(?string $search)
+    {
+        if (!empty($search)) {
+            $users = User::query()
+                ->where('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('email', 'LIKE', '%' . $search . '%')
+                ->orderBy('updated_at', 'DESC')
+                ->paginate(10);
+        } else {
+            $users = User::orderBy('updated_at', 'DESC')->paginate(10);
+        }
+        return $users;
+    }
+
+    public function destroy(User $user): RedirectResponse
+    {
+        try {
+            $user->delete();
+            $msg = ['success' => 'Supplier successfully deleted!'];
+        } catch (QueryException $e) {
+            $msg = ['error' => 'Failed to delete'];
+        }
+        return Redirect::route('users.index')->with($msg);
     }
 }
