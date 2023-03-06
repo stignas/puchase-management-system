@@ -27,6 +27,7 @@ class TransactionsController extends Controller
         } catch (\Exception $e) {
             $msg = ['error' => 'Upload failed'];
         }
+
         return Redirect::back()->with($msg);
     }
 
@@ -75,7 +76,7 @@ class TransactionsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Transactions $transaction): RedirectResponse
+    public function destroy($orderId, Transactions $transaction): RedirectResponse
     {
 
         try {

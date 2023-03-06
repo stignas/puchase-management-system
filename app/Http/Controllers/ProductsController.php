@@ -122,7 +122,7 @@ class ProductsController extends Controller
         return Validator::make($request->all(), [
             'name' => 'required|max:40',
             'supp_id' => Rule::exists('suppliers', 'id'),
-            'cost' => 'required|decimal:2',
+            'cost' => 'required|numeric',
             'VAT' => 'required|numeric|integer',
         ], [
             'name' => 'Name is required.',
