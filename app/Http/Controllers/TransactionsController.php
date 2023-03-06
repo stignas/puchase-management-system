@@ -8,7 +8,6 @@ use App\Models\Transactions;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -28,7 +27,6 @@ class TransactionsController extends Controller
         } catch (\Exception $e) {
             $msg = ['error' => 'Upload failed'];
         }
-
         return Redirect::back()->with($msg);
     }
 
@@ -58,22 +56,6 @@ class TransactionsController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Transactions $transactions): Response
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Transactions $transactions): Response
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(PurchaseOrders $purchaseOrder, Transactions $transaction, Request $request): RedirectResponse
@@ -93,7 +75,7 @@ class TransactionsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($orderId, Transactions $transaction): RedirectResponse
+    public function destroy(Transactions $transaction): RedirectResponse
     {
 
         try {

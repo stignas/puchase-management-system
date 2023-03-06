@@ -18,7 +18,7 @@
 
         <a class="nav-link d-flex btn my-2 link-warning nav-item disabled
         {{ (str_contains(Route::currentRouteName(), 'receiving_orders')) ? 'active' : '' }}"
-           href="{{ route('receiving_orders.index') }}">
+           href="#">
             <img src="{{ asset('assets/img/icons/boxes-packing-solid.svg') }}" width="20px" height="20px"
                  class="svg-warning" alt="boxes">
             <span class="mx-2">Receiving</span>
@@ -54,7 +54,9 @@
                  class="svg-warning" alt="table">
             <span class="mx-2">Products</span>
         </a>
-        <a class="nav-link d-flex btn my-2 link-warning nav-item disabled" href="#">
+        <a class="nav-link d-flex btn my-2 link-warning nav-item
+        {{ (str_contains(Route::currentRouteName(), 'users.')) ? 'active' : '' }}"
+           href="{{ route('users.index') }}">
             <img src="{{ asset('assets/img/icons/users-solid.svg') }}" width="20px" height="20px" class="svg-warning"
                  alt="users">
             <span class="mx-2">Users</span>
