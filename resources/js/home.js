@@ -17,6 +17,8 @@ export default function showHideElements(e, hide, unhide) {
     });
 }
 
+// Modal for excel file upload and delete confirmation forms
+
 const modal = document.getElementById("po-modal");
 const btn = document.getElementById("po-btn");
 const close = document.getElementById('close');
@@ -34,3 +36,5 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
+
+
