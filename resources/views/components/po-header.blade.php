@@ -54,22 +54,28 @@
         </div>
     </div>
     <!-- Button area -->
-    <div class="text-center">
-        <form class="text-primary form-group my-5"
-              action="{{ route('purchase_orders.destroy', $purchaseOrder) }}" method="POST">
-            @csrf
-            @method('DELETE')
-            <button class="btn btn-danger m-1 w-100" type="submit">Cancel/Delete</button>
-        </form>
-        <a class="btn btn-secondary m-1 w-100 d-block" id="po-btn">Import XLS</a>
-        <div class="modal" id="po-modal">
-            @include('purchase-orders.import')
+    <form class="text-primary form-group"
+          action="{{ route('purchase_orders.destroy', $purchaseOrder) }}" method="POST" id="delete-po">
+        @csrf
+        @method('DELETE')
+    </form>
+    <div class="text-center w-25 d-flex flex-column">
+        <div>
+            <button class="btn btn-danger m-1 mb-5 w-100" type="submit" form="delete-po">Delete</button>
         </div>
-        <a href="{{ route('po-pdf', $purchaseOrder) }}" class="btn btn-primary m-1 w-100 d-block">Download
-            PDF</a>
-        <a href="#" class="btn btn-warning m-1 w-100 d-block disabled">Receive</a>
-        <a href="{{ route('purchase_orders.index') }}" class="btn btn-success m-1 w-100 d-block">Back to
-            List</a>
+        <div>
+            <a class="btn btn-secondary m-1 w-100 d-block" id="po-btn">Import XLS</a>
+            <div class="modal" id="po-modal">
+                @include('purchase-orders.import')
+            </div>
+            <a href="{{ route('po-pdf', $purchaseOrder) }}" class="btn btn-primary m-1 w-100 d-block">Download
+                PDF</a>
+        </div>
+        <div>
+            <a href="#" class="btn btn-warning m-1 w-100 d-block disabled">Receive</a>
+            <a href="{{ route('purchase_orders.index') }}" class="btn btn-success m-1 w-100 d-block">Back to
+                List</a>
+        </div>
     </div>
 </div>
 </div>
