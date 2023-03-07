@@ -65,7 +65,7 @@
         </div>
         <div>
             <a class="btn btn-secondary m-1 w-100 d-block" id="po-btn">Import XLS</a>
-            <div class="modal" id="po-modal">
+            <div class="modal hide" id="po-modal">
                 @include('purchase-orders.import')
             </div>
             <a href="{{ route('po-pdf', $purchaseOrder) }}" class="btn btn-primary m-1 w-100 d-block">Download
