@@ -102,7 +102,7 @@ class SuppliersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($orderId, Suppliers $supplier): RedirectResponse
+    public function destroy(Suppliers $supplier): RedirectResponse
     {
         try {
             $supplier->delete();
