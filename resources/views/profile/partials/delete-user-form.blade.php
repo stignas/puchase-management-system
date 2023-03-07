@@ -9,7 +9,7 @@
         </p>
     </header>
     <a class="btn btn-danger d-block" id="po-btn" style="width: 15%">Delete Account</a>
-    <div class="modal" id="po-modal">
+    <div class="modal hide" id="po-modal">
         @include('profile.delete')
     </div>
 </section>
